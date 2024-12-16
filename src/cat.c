@@ -3,27 +3,28 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static void do_cat(const char* path);
+static void do_cat(const int fd, const char* path);
 static void die(const char* s);
 
 int main(int argc, char** argv) {
+  int fd;
   if (argc < 2) {
-    /* 標準エラーへの吐き方 */
-    fprintf(stderr, "Usage: %s <file>\n", argv[0]);
-    exit(1);
-  }
-  for (int i = 1; i < argc; i++) {
-    do_cat(argv[i]);
+    fd = STDIN_FILENO;
+    do_cat(fd, "<STDOUT>");
+  } else {
+    for (int i = 1; i < argc; i++) {
+      fd = open(argv[1], O_RDONLY);
+      if (fd < 0) die(argv[1]);
+      do_cat(fd, argv[i]);
+    }
   }
   exit(0);
 }
 
 #define BUFFER_SIZE 2048
 
-static void do_cat(const char* path) {
-  int fd = open(path, O_RDONLY);
+static void do_cat(const int fd, const char* path) {
   unsigned char buf[BUFFER_SIZE];
-  if (fd < 0) die(path);
 
   for (;;) {
     int n = read(fd, buf, sizeof buf);
