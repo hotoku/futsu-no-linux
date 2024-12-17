@@ -1,0 +1,43 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "cppbuild",
+      "label": "cmake generate makefile - debug",
+      "command": "bash",
+      "args": ["-c", "cmake -S . -B debug -DCMAKE_BUILD_TYPE=Debug"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "Build project with debug configuration."
+    },
+    {
+      "type": "cppbuild",
+      "label": "cmake build - debug",
+      "command": "bash",
+      "args": ["-c", "cmake --build debug"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "Build project with debug configuration.",
+      "dependsOrder": "sequence",
+      "dependsOn": ["cmake generate makefile - debug"]
+    },
+    {
+      "type": "shell",
+      "label": "clean",
+      "command": "bash",
+      "args": ["-c", "rm -rf debug"]
+    }
+  ]
+}
